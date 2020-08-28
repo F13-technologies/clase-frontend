@@ -1,54 +1,65 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { Form, Input, Button, Checkbox } from 'antd';
 
-import authActions from '../../services/Auth/AuthActions';
+//Button, Icon, Breadcrumb, Dropdown, Pagination, Steps, DatePicker, Form, InputNumber, Slider, Select, Upload, Badge,Table
 
-class Login extends React.Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-    };
-  }
-
-  componentDidMount() {
-    this.props.login('admins@gmail.com', '12345');
-  }
-
-  render() {
-    const { auth } = this.props;
-    return (
-      <div>
-        <h1>Login</h1>
-        { auth.movies && 
-          auth.movies.map((movie, i) => {
-            return (
-              <h1 key={i}>{ movie }</h1>
-            )
-          })
-        }
-        <button onClick={() => this.login()}>Iniciar sesión</button>
-      </div>
-    );
-  }
-
-  login(){
-  }
+const layout = {
+  labelCol: { span: 8 },
+  wrapperCol: { span: 16 },
 };
 
-const mapStateToProps = (state) => {
-  return {
-    auth: state.auth
-  }
+const tailLayout = {
+  wrapperCol: { offset: 8, span: 16 },
+};
+
+const Login = () => {
+
+  const onFinish = values => {
+    console.log('Success:', values);
+  };
+
+  const onFinishFailed = errorInfo => {
+    console.log('Failed:', errorInfo);
+  };
+
+  return (
+    <Form
+      {...layout}
+      name="basic"
+      initialValues={{ remember: true }}
+      onFinish={onFinish}
+      onFinishFailed={onFinishFailed}
+    >
+      <Form.Item
+        label="Correo"
+        name="email"
+        rules={[
+          { required: true, message: 'Este campo es requerido' },
+          { max: 40, messgae: 'Mensaje' }
+        ]}
+      >
+        <Input />
+      </Form.Item>
+
+      <Form.Item
+        label="Password"
+        name="password"
+        rules={[{ required: true, message: 'Please input your password!' }]}
+      >
+        <Input.Password />
+      </Form.Item>
+
+      <Form.Item {...tailLayout} name="remember" valuePropName="checked">
+        <Checkbox>Remember me</Checkbox>
+      </Form.Item>
+
+      <Form.Item {...tailLayout}>
+        <Button type="primary" htmlType="submit">
+          Submit
+        </Button>
+      </Form.Item>
+    </Form>
+  )
 }
-
-const mapDispatchToProps = {
-  login: authActions.login
-};
-
-Login = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Login);
 
 export default Login;
